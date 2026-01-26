@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js + shadcn/ui E2B Template
 
-## Getting Started
+A Next.js template with shadcn/ui components, configured for E2B sandboxes.
 
-First, run the development server:
+## E2B Template Setup (v2)
+
+This repository uses E2B Build System v2.
+
+### Prerequisites
+
+1. Get your E2B API key from [E2B Dashboard](https://e2b.dev/dashboard)
+2. Install dependencies: `npm install`
+
+### Building the Template
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Set your API key and build
+E2B_API_KEY="your-api-key" npm run e2b:build
+
+# Or with custom alias
+E2B_API_KEY="your-api-key" E2B_TEMPLATE_ALIAS="my-template" npm run e2b:build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+After building, you'll get a template ID and alias that you can use in your application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Using the Template in Your Application
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```typescript
+import { Sandbox } from 'e2b'
 
-## Learn More
+// Create a sandbox using the template alias
+const sandbox = await Sandbox.create('next-shadcn-template', {
+  apiKey: process.env.E2B_API_KEY,
+})
 
-To learn more about Next.js, take a look at the following resources:
+// The dev server is already running on port 3000
+const url = sandbox.getHost(3000)
+console.log(`Dev server: https://${url}`)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+// When done
+await sandbox.kill()
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Template Configuration
 
-## Deploy on Vercel
+The template:
+- Uses Node.js 20
+- Installs dependencies with `npm ci`
+- Pre-builds Next.js for faster dev startup
+- Starts dev server on port 3000 (bound to 0.0.0.0)
+- Is "ready" only when port 3000 is available
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### NestJS Integration Notes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+When using this template in a NestJS application:
+
+1. **Increase timeout** for port readiness to at least 90 seconds (first startup may take longer)
+2. **The dev server binds to 0.0.0.0** so it's accessible from outside the sandbox
+3. **Use the sandbox URL** from `sandbox.getHost(3000)` to access the dev server
+
+Example SandboxService configuration:
+
+```typescript
+// Wait longer for dev server on first startup
+const MAX_WAIT_MS = 90_000 // 90 seconds
+
+// The template already starts the dev server via setStartCmd
+// No need to manually run npm run dev
+```
+
+## Project Structure
+
+```
+├── e2b/
+│   ├── template.ts    # E2B v2 template definition
+│   └── build.ts       # Build script
+├── src/
+│   ├── app/           # Next.js App Router
+│   └── components/ui/ # shadcn/ui components
+├── components.md      # Component reference
+└── package.json
+```
+
+## Available shadcn/ui Components
+
+See `components.md` for a complete list of installed components with import examples.
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run dev server locally
+npm run dev
+
+# Build for production
+npm run build
+```

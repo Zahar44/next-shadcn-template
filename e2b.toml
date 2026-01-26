@@ -1,7 +1,0 @@
-# E2B Sandbox Template Configuration
-
-# Dockerfile to use
-dockerfile = "e2b.Dockerfile"
-
-# Command to run when sandbox starts (binds to 0.0.0.0 for external access)
-start_cmd = "npm run dev"
