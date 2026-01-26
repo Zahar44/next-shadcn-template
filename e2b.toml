@@ -1,8 +1,7 @@
-# E2B Sandbox Configuration
-# https://e2b.dev/docs/sandbox-template
+# E2B Sandbox Template Configuration
 
-# Start command - runs when sandbox starts
-start_cmd = "cd /home/user && npm run dev"
-
-# Dockerfile to use for building the template
+# Dockerfile to use
 dockerfile = "e2b.Dockerfile"
+
+# Command to run when sandbox starts
+start_cmd = "cd /home/user && npm run dev"
