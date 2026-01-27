@@ -9,4 +9,4 @@ export const template = Template()
   .runCmd(`git clone ${REPO} /tmp/repo && cp -a /tmp/repo/. /home/user/ && rm -rf /tmp/repo`)
   .setWorkdir("/home/user")
   .runCmd("npm ci")
-  .setStartCmd("npx next dev --turbo", waitForPort(3000));
+  .setStartCmd("npx next dev --turbo -H 0.0.0.0 -p 3000", waitForPort(3000));
