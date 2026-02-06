@@ -4,7 +4,7 @@ import 'dotenv/config'
 import { Template, defaultBuildLogger } from 'e2b'
 
 Template.build(template, {
-  alias: `${name}-dev`,
+  alias: `${name}-dev-v2`,
   cpuCount: 4,
   memoryMB: 4096,
   onBuildLogs: defaultBuildLogger(),
