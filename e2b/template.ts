@@ -1,6 +1,6 @@
 import { Template, waitForPort } from "e2b";
 
-const REPO = "https://github.com/Xydozhneak/next-shadcn-template";
+const REPO = "https://github.com/Zahar44/next-shadcn-template.git";
 
 export const template = Template()
   .fromNodeImage("20-slim")
